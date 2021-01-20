@@ -1,17 +1,30 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div v-for="(pokemon, index) in pokemons" :key="index">
+    <Pokemon  :number="index + 1" :name="pokemon.name" :url="pokemon.url" />
+  </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import api from "./services/api";
+
+import Pokemon from './components/Pokemon';
 
 export default {
   name: 'App',
+  created: function() {
+    api.get('pokemon?limit=151&offset=0').then(response => {
+      this.pokemons = response.data.results;
+    });
+  },
+  data() {
+    return {
+      pokemons: []
+    }
+  },
   components: {
-    HelloWorld
+    Pokemon
   }
 }
 </script>
