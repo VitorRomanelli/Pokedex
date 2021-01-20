@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-  <div v-for="(pokemon, index) in pokemons" :key="index">
-    <Pokemon  :number="index + 1" :name="pokemon.name" :url="pokemon.url" />
-  </div>
+    <div v-for="(pokemon, index) in pokemons" :key="index">
+      <Pokemon  :number="index + 1" :name="pokemon.name"/>
+    </div>
   </div>
 </template>
 
@@ -36,6 +36,12 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+
+  gap: 1.5rem;
+
+  padding: 2rem;
 }
 </style>
