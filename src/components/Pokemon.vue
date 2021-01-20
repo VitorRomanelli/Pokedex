@@ -1,6 +1,6 @@
 <template>
   <div class="pokemon">
-    <img :src="pokemon.sprites.front_default" alt="" />
+    <img :src="currentImage" @click="changeImage" alt="" />
     <div class="stats">
       <h1>{{ pokemon.name | firstLetterToUpperCase }}</h1>
       <strong
@@ -29,10 +29,13 @@ export default {
   created: function () {
     api.get(`pokemon/${this.number}`).then((response) => {
       this.pokemon = response.data;
+      this.currentImage = this.pokemon.sprites.front_default;
     });
   },
   data() {
     return {
+      isFront: true,
+      currentImage: "",
       pokemon: {},
     };
   },
@@ -41,16 +44,27 @@ export default {
       return name[0].toUpperCase() + name.slice(1);
     },
   },
+  methods: {
+    changeImage() {
+      if (this.isFront) {
+        this.currentImage = this.pokemon.sprites.back_default;
+        this.isFront = !this.isFront;
+      } else {
+        this.currentImage = this.pokemon.sprites.front_default;
+        this.isFront = !this.isFront;  
+      }
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
 .pokemon {
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  background: #f2f2f2;
+  background: #f1f1f1;
 
   box-shadow: 0 0 1em #0004;
 
@@ -58,16 +72,15 @@ export default {
 }
 
 .stats {
-  background: #cfcfcf;
+  background: #d3d3d3;
 
-  padding: 20px;
+  padding: 0 12px 30px 12px;
 
   width: 100%;
   height: 50%;
 
   border-radius: 6px;
-  box-shadow: 0 0 .1em #0004;
-
+  box-shadow:1 1 1 1em #0004;
 }
 
 img {
@@ -78,5 +91,14 @@ img {
   image-rendering: -webkit-crisp-edges;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+
+  object-fit: cover;
+
+  transition: 300ms;
+}
+
+img:hover {
+  cursor: pointer;
+  width: 105%;
 }
 </style>

@@ -1,7 +1,10 @@
 <template>
   <div id="app">
-    <div v-for="(pokemon, index) in pokemons" :key="index">
-      <Pokemon  :number="index + 1" :name="pokemon.name"/>
+    <img src="./assets/logo.png" alt="Pokemon Logo">
+    <div class="pokemons">
+      <div v-for="(pokemon, index) in pokemons" :key="index">
+        <Pokemon :number="index + 1" :name="pokemon.name" />
+      </div>
     </div>
   </div>
 </template>
@@ -9,39 +12,45 @@
 <script>
 import api from "./services/api";
 
-import Pokemon from './components/Pokemon';
+import Pokemon from "./components/Pokemon";
 
 export default {
-  name: 'App',
-  created: function() {
-    api.get('pokemon?limit=151&offset=0').then(response => {
+  name: "App",
+  created: function () {
+    api.get("pokemon?limit=151&offset=0").then((response) => {
       this.pokemons = response.data.results;
     });
   },
   data() {
     return {
-      pokemons: []
-    }
+      pokemons: [],
+    };
   },
   components: {
-    Pokemon
-  }
-}
+    Pokemon,
+  },
+};
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-
+}
+.pokemons {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 
   gap: 1.5rem;
 
   padding: 2rem;
 }
-</style>
+
+img {
+  width: 50%;
+}
+
+</style>>
