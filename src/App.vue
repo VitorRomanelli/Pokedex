@@ -9,10 +9,9 @@
         v-model="search"
         id="search-input"
       />
-      <button @click="searchPokemon">Search</button>
     </div>
     <div class="pokemons">
-      <div v-for="(pokemon, index) in filter" :key="pokemon.url">
+      <div v-for="(pokemon, index) in searchResult" :key="pokemon.url">
         <Pokemon :number="index + 1" :name="pokemon.name" :url="pokemon.url" />
       </div>
     </div>
@@ -27,33 +26,19 @@ import Pokemon from "./components/Pokemon";
 export default {
   name: "App",
   created: function () {
+    console.log("primeiro")
     api.get("pokemon?limit=151&offset=0").then((response) => {
       this.pokemons = response.data.results;
-      this.filter = response.data.results;
     });
   },
   data() {
     return {
       search: "",
       pokemons: [],
-      filter: [],
     };
   },
   components: {
     Pokemon,
-  },
-  methods: {
-    searchPokemon: function () {
-      this.filter = this.pokemons;
-      if (this.search === "" || this.search === " ") {
-        this.filter = this.pokemons;
-      } else {
-        this.filter = this.pokemons.filter(
-          (pokemon) => pokemon.name.toLowerCase() === this.search.toLowerCase()
-        );
-        console.log(this.filter);
-      }
-    },
   },
   computed: {
     searchResult: function () {
@@ -61,7 +46,7 @@ export default {
         return this.pokemons;
       } else {
         return this.pokemons.filter(
-          (pokemon) => pokemon.name.toLowerCase() === this.search.toLowerCase()
+          (pokemon) => pokemon.name.toLowerCase().includes(this.search.toLowerCase())
         );
       }
     },
@@ -124,35 +109,6 @@ span {
   color: #fff;
 }
 
-button {
-  width: 20%;
-  height: 2rem;
-
-  outline: none;
-
-  border: none;
-  border-radius: 8px;
-
-  font-size: 16px;
-
-  background: #006ec9;
-  color: #fff;
-
-  transition: 300ms;
-}
-
-button:hover {
-  cursor: pointer;
-  background: #19db12;
-  width: 21%;
-
-  transition: 100ms;
-}
-
-button:focus {
-  border: 2px solid #ecd825;
-}
-
 .pokemons {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -161,7 +117,7 @@ button:focus {
 
   padding: 2rem;
 
-  height: 692px;
+  height: 69vh;
 
   overflow-y: auto;
   scroll-snap-type: x mandatory;
@@ -175,6 +131,24 @@ button:focus {
 
   background-attachment: fixed;
 }
+
+@media(max-width: 1200px){
+  .pokemons {
+  grid-template-columns: 1fr 1fr 1fr;
+  }
+} 
+
+@media(max-width: 900px){
+  .pokemons {
+    grid-template-columns: 1fr 1fr;
+  }
+} 
+
+@media(max-width: 650px){
+  .pokemons {
+    grid-template-columns: 1fr;
+  }
+} 
 
 ::-webkit-scrollbar {
   display: none;
